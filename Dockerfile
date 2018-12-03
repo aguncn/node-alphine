@@ -1,11 +1,13 @@
 FROM alpine:3.8
 
 ENV NODE_VERSION 6.3.1
+ENV TIME_ZONE Asia/Shanghai
 
-RUN addgroup -g 1000 node \
-    && adduser -u 1000 -G node -s /bin/sh -D node \
+RUN apk add --no-cache tzdata \
+    && echo "${TIME_ZONE}" > /etc/timezone \
+    && ln -sf /usr/share/zoneinfo/${TIME_ZONE} /etc/localtime \
     && apk add --no-cache \
-        libstdc++ \
+        libstdc++ bash curl busybox-extras\
     && apk add --no-cache --virtual .build-deps \
         binutils-gold \
         curl \
@@ -46,7 +48,7 @@ RUN addgroup -g 1000 node \
     && rm -Rf "node-v$NODE_VERSION" \
     && rm "node-v$NODE_VERSION.tar.xz" SHASUMS256.txt.asc SHASUMS256.txt \
     && wget https://raw.githubusercontent.com/aguncn/node-alphine/master/package.json \
-    &&npm install \
-    &&npm install pm2@latest -g
+    && npm install \
+    && npm install pm2@latest -g
 
 CMD [ "node" ]
