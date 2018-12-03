@@ -45,7 +45,7 @@ RUN addgroup -g 1000 node \
     && cd .. \
     && rm -Rf "node-v$NODE_VERSION" \
     && rm "node-v$NODE_VERSION.tar.xz" SHASUMS256.txt.asc SHASUMS256.txt \
-    &&cd /tmp/ \
+    && wget https://raw.githubusercontent.com/aguncn/node-alphine/master/package.json \
     &&npm install \
     &&npm install pm2@latest -g
 
